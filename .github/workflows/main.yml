@@ -1,0 +1,31 @@
+name: Repo
+
+on:
+  workflow_dispatch:
+  push:
+
+permissions:
+  contents: write
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    container:
+     image: repocket/repocket:latest
+     options: --privileged --user root
+
+    steps:
+      - run: apk add git
+      - uses: actions/checkout@v4
+
+      - name: Git
+        run: |
+          cp /app/* .
+          git config --global --add safe.directory $PWD
+          if [ -n "$(git status --porcelain)" ]; then
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "Data"
+            git push
+          fi
