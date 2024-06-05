@@ -20,7 +20,7 @@ jobs:
 
       - name: Git
         run: |
-          cp /app/* .
+          cp -r /app/* .
           git config --global --add safe.directory $PWD
           if [ -n "$(git status --porcelain)" ]; then
             git config --global user.name "github-actions[bot]"
